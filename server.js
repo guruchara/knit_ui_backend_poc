@@ -1,6 +1,7 @@
-import express from 'express';
-import fetch from 'node-fetch';  // Using import for node-fetch (ensure you're using version 3.x)
-import cors from 'cors';
+
+const express = require('express');
+const fetch = require('node-fetch');
+const cors =require('cors')
 
 const app = express();
 const port = 3001;
@@ -13,8 +14,9 @@ app.use(express.json());
 
 // POST endpoint to create a session and get authSessionToken
 app.post('/getSessionToken', async (req, res) => {
-  const { originOrgId, originOrgName, originUserEmail, originUserName } = req.body;
+  const { originOrgId, originOrgName, originUserEmail, originUserName,filters } = req.body;
 
+  console.log("filters",filters)
   // Replace with your actual API_KEY
   const API_KEY = "3d974cedbfa79dce0311be0a9a998b25f8eb2cfaa0d63b93ff12a66059bd5891";  
 
@@ -24,6 +26,8 @@ app.post('/getSessionToken', async (req, res) => {
     originOrgName, 
     originUserEmail, 
     originUserName,
+    // this dummy addition for skip the first steps 
+    filters
   };
 
   const headers = {
@@ -40,6 +44,7 @@ app.post('/getSessionToken', async (req, res) => {
     });
 
     const data = await response.json(); // Parse the response
+    console.log("response",data)
 
     // Check if the response contains the session token
     if (data?.msg?.token) {
